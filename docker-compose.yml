@@ -22,7 +22,7 @@ services:
         depends_on:
             - es
         build:
-            context: https://github.com/RDBloese/tla-es-1.git
+            context: https://github.com/thesaurus-linguae-aegyptiae/tla-es.git#server  
         environment:
             - ES_HOST=es
             - ES_PORT=9201
@@ -34,7 +34,7 @@ services:
     backend:
         container_name: tla-backend
         build:
-            context: https://github.com/RDBloese/tla-es-1.git
+            context: https://github.com/thesaurus-linguae-aegyptiae/tla-es.git#server  
         environment:
             - ES_HOST=es
             - ES_PORT=9201
