@@ -51,8 +51,17 @@ public class Sentence extends TLAObject implements Hierarchic {
      * Determine whether any of a sentence's tokens have any hieroglyph encodings.
      */
     public boolean hasGlyphs() {
-        return this.tokens.stream().anyMatch(
-            token -> !token.getGlyphs().isEmpty()
+        return this.tokens.stream().anyMatch( // for at least one token:
+			token -> (token.getType().equals("word") && !token.getGlyphs().isEmpty()) // iff "word" token and there are hieroglyphs => true
+        );
+    }
+
+    public boolean isArtificiallyAligned() {
+		/*this.tokens.stream().forEach( // for at least one token:
+			token -> System.out.println(token.getGlyphs().isMdcArtificiallyAligned())
+        );*/
+        return this.tokens.stream().anyMatch( // for at least one token:
+			token -> token.getGlyphs().isMdcArtificiallyAligned() == true
         );
     }
 
@@ -73,6 +82,7 @@ public class Sentence extends TLAObject implements Hierarchic {
         try {
         
           List<Passport> dates =text.getPassport().extractProperty(PASSPORT_PROP_DATE);
+         
           for(int i=0;i<dates.size();i++) {
         	  for(int j=0;j<dates.get(i).extractObjectReferences().size();j++) {
         	 System.out.println("Fields "+ i+ " "+ j+" "+ dates.get(i).extractObjectReferences().get(j).getName());
@@ -80,10 +90,10 @@ public class Sentence extends TLAObject implements Hierarchic {
         	 datierung.add(new DatePair(dates.get(i).extractObjectReferences().get(j).getId(),dates.get(i).extractObjectReferences().get(j).getName()));
         	  }
           }
-           // System.out.println("Extracted "+text.getPassport().extractProperty("date.date.date").get(0).getContents());
+            System.out.println("Extracted "+text.getPassport().extractProperty("date.date.date").get(0).getContents());
         } catch (Exception e) {
            // log.debug("could not extract date from text {}", text.getId());
-            //System.out.println("could not extract bibliography from text "+  text.getId());
+           System.out.println("could not extract bibliography from text "+  text.getId());
         }
         return datierung;
     }

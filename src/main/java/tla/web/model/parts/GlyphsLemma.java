@@ -14,24 +14,20 @@ import lombok.AllArgsConstructor;
 @EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class Glyphs {
+public class GlyphsLemma {
 
-    public static final Glyphs EMPTY = new Glyphs();
+    public static final GlyphsLemma EMPTY = new GlyphsLemma();
 
     private String unicode;
 
     private String mdcCompact;
-    private String mdcOriginal;
-    private String mdcOriginalSafe;
-    private String mdcTla;
     private String svg;
     
-    private boolean mdcArtificiallyAligned;
 
     /**
      * Creates UI hieroglyphs representation of Manuel de Codage encoding.
      */
-    public static Glyphs of(String mdc) {
+    public static GlyphsLemma of(String mdc) {
         return of(mdc, false);
     }
 
@@ -39,8 +35,8 @@ public class Glyphs {
      * Creates UI hieroglyphs representation of Manuel de Codage encoding.
      * @param rubrum whether or not to render the entire thing in red
      */
-    public static Glyphs of(String mdc, boolean rubrum) {
-        return Glyphs.builder()
+    public static GlyphsLemma of(String mdc, boolean rubrum) {
+        return GlyphsLemma.builder()
      
             .mdcCompact(mdc)
             .unicode(mdc)
@@ -52,33 +48,22 @@ public class Glyphs {
      * Creates UI hieroglyphs representation for DTO glyphs object, i.e. renders SVG graphics
      * using JSesh with optional rubrum characteristics.
      */
-    public static Glyphs of(tla.domain.model.SentenceToken.Glyphs dto, boolean rubrum) {
-        if (dto != null) {
-        	System.out.println("Sentence DTO");
-            return Glyphs.builder()
-                .mdcCompact(dto.getMdcCompact())
-                .unicode(dto.getUnicodeTla())
-                .mdcArtificiallyAligned(dto.isMdcArtificiallyAligned())
-                .svg(Util.jseshRender(dto.getMdcCompact(), rubrum))
-                .build();
-        } else {
-            return Glyphs.EMPTY;
-        }
-    }
     
- /*   public static Glyphs of(tla.domain.dto.LemmaDto.Glyphs dto, boolean rubrum) {
+    public static GlyphsLemma of(tla.domain.dto.LemmaDto.Glyphs dto, boolean rubrum) {
+   
         if (dto != null) {
         	System.out.println("Lemma DTO");
-            return Glyphs.builder()
+            return GlyphsLemma.builder()
                 .mdcCompact(dto.getMdcCompact())
                 .unicode(dto.getUnicode())
                 .svg(Util.jseshRender(dto.getMdcCompact(), rubrum))
                 .build();
         } else {
-            return Glyphs.EMPTY;
+        	System.out.println("Lemma DTO EMPTY");
+            return GlyphsLemma.EMPTY;
         }
     }
-*/
+
     /**
      * Returns true if all attributes are actually empty.
      */

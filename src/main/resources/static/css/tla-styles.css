@@ -67,13 +67,23 @@ li {
     font-family: "Roboto Condensed";
 }
 
-a {
+a,
+.result-list-item-element.variants-list a {
     color: var(--BBAWred);
 }
 
-a:hover {
+.result-list-item a {
+    color: black;
+}
+
+a:hover,
+.result-list-item-element.variants-list a:hover {
     text-decoration: none;
     color: var(--BBAWred);
+}
+
+.result-list-item a:hover {
+    color: black;
 }
 
 hr {
@@ -87,6 +97,53 @@ blockline
 .bbaw-libertine, .transliteration {
     font-family: "BBAWLibertine", "New Athena Unicode", serif;
 }
+
+
+/* loader animation */
+
+.loader-wrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #242f3f;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+.loader {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  position: relative;
+  border: 4px solid #Fff;
+  animation: loader 2s infinite ease;
+}
+.loader-inner {
+  vertical-align: top;
+  display: inline-block;
+  width: 100%;
+  background-color: #fff;
+  animation: loader-inner 2s infinite ease-in;
+}
+
+@keyframes loader {
+  0% { transform: rotate(0deg);}
+  25% { transform: rotate(180deg);}
+  50% { transform: rotate(180deg);}
+  75% { transform: rotate(360deg);}
+  100% { transform: rotate(360deg);}
+}
+
+@keyframes loader-inner {
+  0% { height: 0%;}
+  25% { height: 0%;}
+  50% { height: 100%;}
+  75% { height: 100%;}
+  100% { height: 0%;}
+}
+
 
 .searchresult h2 {
     font-weight: medium;
@@ -129,8 +186,12 @@ a.navbar-brand {
     background-color: var(--BBAWred);
 }
 
-.navbar h1 {
+.navbar-title h1 {
     font-size: 1.5rem;
+    color: rgba(0, 0, 0, 0.5);
+}
+.navbar-title p {
+    font-size: 1rem;
     color: rgba(0, 0, 0, 0.5);
 }
 
@@ -215,21 +276,15 @@ a.navbar-brand {
     background-color: #888;
 }
 
-.result-list-item h2,
-.related-objects-item h2 {
+.result-list-item h2 {
     display: inline-block;
-}
-
-.result-list-item:hover {
-    cursor: pointer;
 }
 
 .result-list-item:hover h2 .hieroglyphs {
     background-color: white;
 }
 
-.result-list-item .object-type-subtype ,
-.related-objects-item .object-type-subtype {
+.result-list-item .object-type-subtype {
     font-weight: 300;
     font-style: italic;
 }
@@ -247,8 +302,7 @@ a.navbar-brand {
     color: white;
 }
 
-.result-list-item a.bibliography-list,
-.related-objects-item a.bibliography-list {
+.result-list-item a.bibliography-list {
     padding: 3px 1px 3px 10px;
     margin-left: -9px;
 }
@@ -269,7 +323,7 @@ a.navbar-brand {
     color: white;
 }
 
-.result-list-item.obsolete {
+.result-list-item.inactive {
     opacity: .4;
     filter: grayscale(100%);
 }
@@ -287,8 +341,7 @@ a.navbar-brand {
 }
 
 .result-list-item:first-child,
-.occ-list-item:first-child,
-.related-objects-item:first-child {
+.occ-list-item:first-child {
 
 }
 
@@ -314,8 +367,7 @@ a.navbar-brand {
     /* IE6-9 */
 }
 
-.result-list-item h2,
-.related-objects-item h2 {
+.result-list-item h2 {
     color: var(--BBAWred);
     font-size: 1.4em;
 }
@@ -339,14 +391,16 @@ a.navbar-brand {
 }
 
 /** search form toggle collapsible icons */
-
-button.toggle-collapsible span svg {
+.card i {
+    font-size: 1.2rem;
+}
+.card i svg {
     color: var(--BBAWred);
 }
-button.toggle-collapsible span.collapsed:before {
+.card i.collapsed:before {
     content: "\f0a9";
 }
-button.toggle-collapsible span.expanded:before {
+.card i.expanded:before {
     content: "\f0ab";  /** arrow down: \f0aa */
 }
 
@@ -375,6 +429,13 @@ button.toggle-collapsible span.expanded:before {
     content: "\f05e";
 }
 .red-status span.notok svg {
+    color: var(--danger);
+}
+
+.red-status span.artificiallyaligned:before {
+    content: "\f850";
+}
+.red-status span.artificiallyaligned svg {
     color: var(--danger);
 }
 
@@ -490,6 +551,7 @@ span.lc:hover {
     font-size: 1.75em;
 }
 
+g,
 .latin-in-hiero {
     color: grey;
     font-size: 0.5em;
@@ -508,11 +570,15 @@ span.lc:hover {
     line-height: 1.2;
     padding-left: 0.25rem;
 }
-.transcription .sentence-token.rubrum {
+
+.transcription .rubrum,
+.token-word.rubrum {
+	 text-decoration: underline var(--BBAWred);
     color: var(--BBAWred);
 }
+
 .transcription a {
-    color: var(--BBAWdarkgrey);
+    color: var(--BBAWred);
 }
 .sentence-line-mode :target span svg {
     background-color: yellow;
@@ -530,13 +596,20 @@ span.lc:hover {
     color: black !important;
     font-weight: bold;
 }
-
 .token-para {
     color: var(--BBAWmiddlebluegrey) !important;
+    font-weight: bold;
+}
+.token-para:before {
+    content: "(";
+}
+.token-para:after {
+    content: ")";
 }
 
-.token-para:before {
-    content: "§";
+.token-verse_point,
+.token-default {
+    color: black !important;
 }
 
 .translations
@@ -550,14 +623,16 @@ span.lc:hover {
 }
 
 .translation-de,
+.translation-fr,
+.translation-en,
 .translation-any {
     font-weight: bold;
 }
 
-.translation-fr,
+/*.translation-fr,
 .translation-en {
     font-weight: 300;
-}
+}*/
 
 .lang-icon {
     background-color: #E0E0E0;
@@ -587,8 +662,7 @@ span.token-glyphs svg:hover {
 	 /*border-bottom: 1px solid var(--BBAWred);*/
 }
 
-.result-list-item hr,
-.related-objects-item hr {
+.result-list-item hr {
     margin: 0 !important;
 }
 
@@ -631,8 +705,14 @@ ul.annotation-block {
 
 ul.annotation-block:hover {
     background-color: #EEE;
-    cursor: pointer;
+    /*cursor: pointer;*/
 }
+
+span.bts-glossing:hover,
+span.ling-glossing:hover {
+    cursor: pointer;	
+}
+
 
 .annotation-block.active {
     background-color: #aaa;
@@ -734,6 +814,10 @@ footer.bg-light {
     height: 60px;
 }
 
+.footer-credits {
+	font-size: 0.85rem;
+}
+
 #cookie-info {
     font-size: 0.9em;
     color: var(--BBAWdarkgrey);
@@ -812,9 +896,24 @@ footer.bg-light {
     padding-left: .5rem;
 }
 
+.modal-body table,
+.bordered-table table {
+	border-collapse: collapse;
+}
+.modal-body tr,
+.bordered-table tr {
+	vertical-align: top;
+	border-bottom: 1pt solid lightgrey;
+	border-top: 1pt solid lightgrey;
+}
+
+.modal-footer-text {
+	text-align: left;
+}
+
 /* Citation */
 .citation {
-    padding: 1em;
+    padding: 5px;
 }
 
 .citation li,
@@ -852,6 +951,11 @@ footer.bg-light {
 
 .card-header h2 .btn-link:hover {
     text-decoration: none;
+}
+
+
+.keyboardInput {
+    float: left;
 }
 
 .keyboardInputInitiator {
@@ -932,6 +1036,13 @@ h2.id span {
 
 .hide {
 	display:none;
+}
+
+.hide-content {
+	visibility: hidden;
+}
+.show-content {
+	visibility: visible;
 }
 
 
@@ -1181,8 +1292,13 @@ span.multiselect-native-select select {
 @media only screen and (max-width: 992px) {
 
     .container {
-        max-width: 98% !important;
+        max-width: 100% !important;
     }
+	
+	.container .content {
+		padding-left: 5px;
+		padding-right: 5px;
+	}
 
     #button-bar-small {
 
@@ -1222,7 +1338,6 @@ span.multiselect-native-select select {
     #homepage-img {
         width: 100%;
     }
-
 
     .footer-logo {
         margin-top: 2rem;

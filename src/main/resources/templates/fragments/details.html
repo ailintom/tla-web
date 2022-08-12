@@ -94,10 +94,8 @@
     <div class="comment pb-2" id="single-entry-annotations" th:fragment="single-entry-annotations" th:unless="${#lists.isEmpty(annotations)}">
         <hr/>
         <strong th:text="#{object_property_annotations}" class="details-property-label">Comments</strong>
-        <div th:each="annotation : ${annotations}" class="comment-wrapper hide-comment">
-            <p>
-                <strong th:unless="${annotation.name} == null" th:utext="${{annotation.name}}">title</strong>
-            </p>
+        <div th:each="annotation, counter : ${annotations}" class="comment-wrapper hide-comment">
+            <p th:if="${counter.size} > 1" class="ml-3"><strong th:text="#{object_property_annotation} + ' ' + ${counter.index +1}">Comment 1<strong></p>
             <p class="comment-content text-justify ml-4" th:utext="${annotation.body}">annotation body</p>
             <p class="comment-author pt-1 ml-4" th:with="formatter=#{date_formatter}">
                 <span class="details-property-label" th:text="#{object_property_editors_updated}">Latest revision</span>:
@@ -158,7 +156,7 @@
     </div>
 
     <!-- Lemma details hieroglyphs -->
-    <div th:fragment="lemma-property-hieroglyphs" id="lemma-property-hieroglyphs" th:unless="${obj.hieroglyphs} == null">
+    <div th:fragment="lemma-property-hieroglyphs" id="lemma-property-hieroglyphs" th:if="${obj.glyphs.unicode} != null">
         <p>
             <strong th:text="#{lemma_property_hieroglyphs}" class="details-property-label">Hieroglyphic spelling(s)</strong>:
             <span th:replace=" :: hieroglyphs"/>
@@ -179,18 +177,17 @@
             <strong th:text="#{lemma_property_attestation}" class="details-property-label">Attestation</strong>
         </p>
 		 <p th:if="${obj.attestationCount} > 0">
-            <strong th:text="#{lemma_property_attestation_occurrences}" class="details-property-label">Occurrences</strong>
            <span th:text="${obj.attestationCount}" id="attestationCount" style="visibility:hidden">0</span>
    
             <a th:href="|${@searchController.getSearchResultsPageRoute(@__sentenceController__)}?tokens[0].lemma.id=${obj.id}|">
                 <i class="fas fa-arrow-circle-right red"></i>
-               <button id="lemma-attestation-count-texts" type="button" class="btn btn-danger text-left text-decoration-none" th:text="#{lemma_property_digitaltext}+' '+ ${obj.attestationCount} + ' ' + #{|lemma_property_instance${(obj.attestationCount > 1) ? 's' : ''}|}">Instances in __ text(s)</button>
+               <button id="lemma-attestation-count-texts" type="button" class="btn btn-danger text-left text-decoration-none" th:text="#{lemma_property_attestation_occurrences} + ' ' + ${(obj.attestationCount >= 10000) ? '>' : ''} + ${obj.attestationCount} + ' ' + #{|lemma_property_instance${(obj.attestationCount > 1) ? 's' : ''}|}">Occurrences in __ sentences</button>
             </a>
             <br/>
             <th:block th:replace=" :: lemma-timespan"/>
         </p>
 		 <p th:unless="${obj.attestationCount} > 0">
-            <strong th:text="#{lemma_property_attestation_occurrences}" class="details-property-label">Occurrences</strong>: <span th:text="#{lemma_property_no_instances}">none</span>
+            <span th:text="#{lemma_property_no_instances}">No occurrences</span>
         </p>		 
     </div>
 
@@ -216,7 +213,7 @@
                 <span th:text="#{|${objectType}_relation_predicate_${predicate.key}|}" class="details-property-label">Predicate</span>
             </div>
             <div class="col-md-12">
-                <div class="related-objects-item" th:each="obj : ${predicate.value}" th:object="${obj}" th:id="${obj.id}"
+                <div class="result-list-item" th:each="obj : ${predicate.value}" th:object="${obj}" th:id="${obj.id}"
                     th:unless="${obj == null || obj.eclass == 'BTSAnnotation'}"
                     th:include="fragments/search/results :: |${objectType}-search-result|">
                 </div>
@@ -224,8 +221,8 @@
         </div>
     </div>
 	
-   <div th:fragment="object-property-citationBox" id="object-property-citationBox" class="bg-light citation mt-5 mb-4"> 
-    	<div class="bg-light citation mt-2 mb-2"> 
+   <div th:fragment="object-property-citationBox" id="object-property-citationBox" class="bg-light citation m-sm-2 m-lg-4"> 
+    	<div class="bg-light citation  m-sm-1 m-lg-2"> 
     <p class="h6" ><strong th:text="#{citeas_heading}">Please cite as</strong>:</p>
 				<blockquote id="full-citation"><span th:text="${obj.name} + ' (' + #{citeas_lemma} +' '+ ${obj.id} + '), <' + ${env.baseUrl}+'/lemma/' + ${obj.id} +'>, in: '"></span>  
 					<span style="font-style: italic;" th:text="#{tla_Title}"></span>  
@@ -241,8 +238,8 @@
      </div>  
     </div>
 
-   <div th:fragment="sentence-citationBox" id="sentence-citationBox" class="bg-light citation mt-5 mb-4"> 
-    	<div class="bg-light citation mt-2 mb-2"> 
+   <div th:fragment="sentence-citationBox" id="sentence-citationBox" class="bg-light citation m-sm-2 m-lg-4"> 
+    	<div class="bg-light citation m-sm-1 m-lg-2"> 
     <p class="h6" ><strong th:text="#{citeas_heading}">Please cite as</strong>:</p>
 				<blockquote id="full-citation"><span th:text="#{citeas_sentence} +' '+ ${obj.id} + ', <' + ${env.baseUrl}+'/sentence/' + ${obj.id} +'>, in: '"></span>  
 					<span style="font-style: italic;" th:text="#{tla_Title}"></span>  
@@ -293,10 +290,15 @@
         </th:block>
     </span>
 
-    <!-- hieroglyphs -->
-    <th:block th:fragment="hieroglyphs" th:if="${obj.hieroglyphs != null}">
-        <span th:each="glyphs : ${obj.hieroglyphs}">
-            <span class="hieroglyphs" th:title="${glyphs.mdc}" th:utext="${glyphs.svg}"/>
+    <!-- hieroglyphs in Lemma Detail-->
+    <th:block th:fragment="hieroglyphs" th:if="${obj.glyphs.svg != null}">
+       
+            <span class="hieroglyphs" th:title="${obj.glyphs.mdcCompact}" th:utext="${obj.glyphs.svg}" style="height: 14pt"/>
+        </span>
+    </th:block>
+     <!-- hieroglyphs in Such-Ergebniss-->
+     <th:block th:fragment="hieroglyphsSuche" th:if="${obj.glyphs.unicode != null}">
+            <span class="unicode-hieroglyphs" th:title="${obj.glyphs.mdcCompact}" th:utext="${{obj.glyphs.unicode}}" style="height: 14pt"/>
         </span>
     </th:block>
 

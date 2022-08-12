@@ -70,6 +70,7 @@ public class Util {
     public static String jseshRender(String mdc, boolean rubrum) {
         if (mdc != null && !mdc.isBlank()) {
             try (StringWriter writer = new StringWriter()) {
+            	System.out.println("MDC "+mdc);
                 Rectangle2D boundingBox = facade.getBounds(
                     mdc, 0, 0
                 );
@@ -86,12 +87,14 @@ public class Util {
                 svg.dispose();
                 return patchSVG(writer);
             } catch (Exception e) {
-                log.warn(
-                    "Jsesh could not render hieroglyph encoding '{}': {}",
-                    mdc, e.toString()
+               // log.warn(
+            	System.out.println(
+                    "Jsesh could not render hieroglyph encoding '{}': {}"+
+                    mdc+ " "+e.toString()
                 );
             }
         }
+       
         return null;
     }
 
@@ -112,32 +115,39 @@ public class Util {
     public static String escapeMarkup(String text) {
         if (text != null) {
 			//System.out.println("###### in escapeMarkup: " + text);
-			if (text.contains("#g")) {
-				text = text.replaceAll("(?<=#g\\+[^#]*)w(?=[^#]*?#g\\-)", "s"); // End-Sigma in Vittmann's encoding ("w")
-				text = text.replaceAll("(?<=#g\\+[^#]*)h(?=[^#]*?#g\\-)", "ē"); // Eta in Vittmann's encoding ("h")
-				text = text.replaceAll("(?<=#g\\+[^#]*)H(?=[^#]*?#g\\-)", "Ē"); 
-				text = text.replaceAll("(?<=#g\\+[^#]*)v(?=[^#]*?#g\\-)", "ō"); // Omega in Vittmann's encoding ("w")
-				text = text.replaceAll("(?<=#g\\+[^#]*)V(?=[^#]*?#g\\-)", "Ō"); 
-				text = text.replaceAll("(?<=#g\\+[^#]*)%\\?(?=[^#]*?#g\\-)", "\u0342"); // Greek perispomeni in Vittmann's encoding
-				text = text.replaceAll("(?<=#g\\+[^#]*)%\\)(?=[^#]*?#g\\-)", "\u0313"); // Greek, psili; spiritus lenis in Vittmann's encoding("%)")
-				text = text.replaceAll("(?<=#g\\+[^#]*)%\\((?=[^#]*?#g\\-)", "\u0314"); // Greek dasia; spiritus asper in Vittmann's encoding ("%(")
-				text = text.replaceAll("(?<=#g\\+[^#]*)%\\-(?=[^#]*?#g\\-)", "\u0304"); // length in Vittmann's encoding ("%-")
-				text = text.replaceAll(GREEK_FONT_MARKUP_VITTMANN_REGEX, MULTILING_FONT_MARKUP_REPLACEMENT);
-				/*text = RegExUtils.replacePattern(
-					text,
-					GREEK_FONT_MARKUP_VITTMANN_REGEX,
-					MULTILING_FONT_MARKUP_REPLACEMENT
-				);*/
-			}
-			/*text = RegExUtils.replacePattern(
-				text,
-				MULTILING_FONT_MARKUP_REGEX,
-				MULTILING_FONT_MARKUP_REPLACEMENT
-			);*/
-			text = text.replaceAll(GREEK_FONT_MARKUP_REGEX, MULTILING_FONT_MARKUP_REPLACEMENT);
-			text = text.replaceAll(HIERO_FONT_MARKUP_REGEX, HIERO_FONT_MARKUP_REPLACEMENT);
-			text = text.replaceAll(TRANSLITERATION_FONT_MARKUP_REGEX, MULTILING_FONT_MARKUP_REPLACEMENT);
-            text = text.replaceAll("\\n", "<br/>");
+				if (text.contains("#g")) {
+					text = text.replaceAll("(?<=#g\\+[^#]*)w(?=[^#]*?#g\\-)", "s"); // End-Sigma in Vittmann's encoding ("w")
+					text = text.replaceAll("(?<=#g\\+[^#]*)h(?=[^#]*?#g\\-)", "\u0113"); // Eta in Vittmann's encoding ("h")
+					text = text.replaceAll("(?<=#g\\+[^#]*)H(?=[^#]*?#g\\-)", "\u0112"); 
+					text = text.replaceAll("(?<=#g\\+[^#]*)v(?=[^#]*?#g\\-)", "\u014D"); // Omega in Vittmann's encoding ("w")
+					text = text.replaceAll("(?<=#g\\+[^#]*)V(?=[^#]*?#g\\-)", "\u014C"); 
+					text = text.replaceAll("(?<=#g\\+[^#]*)%\\?(?=[^#]*?#g\\-)", "\u0342"); // Greek perispomeni in Vittmann's encoding
+					text = text.replaceAll("(?<=#g\\+[^#]*)%\\)(?=[^#]*?#g\\-)", "\u0313"); // Greek, psili; spiritus lenis in Vittmann's encoding("%)")
+					text = text.replaceAll("(?<=#g\\+[^#]*)%\\((?=[^#]*?#g\\-)", "\u0314"); // Greek dasia; spiritus asper in Vittmann's encoding ("%(")
+					text = text.replaceAll("(?<=#g\\+[^#]*)%\\-(?=[^#]*?#g\\-)", "\u0304"); // length in Vittmann's encoding ("%-")
+					text = text.replaceAll(GREEK_FONT_MARKUP_VITTMANN_REGEX, MULTILING_FONT_MARKUP_REPLACEMENT);
+				}
+				text = text.replaceAll(GREEK_FONT_MARKUP_REGEX, MULTILING_FONT_MARKUP_REPLACEMENT);
+				text = text.replaceAll(HIERO_FONT_MARKUP_REGEX, HIERO_FONT_MARKUP_REPLACEMENT);
+				text = text.replaceAll(TRANSLITERATION_FONT_MARKUP_REGEX, MULTILING_FONT_MARKUP_REPLACEMENT);
+				
+				// line breaks to HTML
+				text = text.replace("\\n", "<br/>");
+				
+				// Set style of non-Unicode glyphs in gyphs.unicode
+				text = text.replace("<g>", "<span class=\"latin-in-hiero\">");
+				text = text.replace("</g>", "</span>");
+				
+				// Cut out parts in 〈 ... 〉 in marked labels
+				if (text.contains("<label>")) {
+					text = text.replaceAll("(<label>.*?)〈.*?〉(.*</label>)", "$1$2");
+					text = text.replaceAll("(<label>.*?)〈.*?〉(.*</label>)", "$1$2"); // sic, up to two instances
+					text = text.replace("<label>", "");
+					text = text.replace("</label>", "");
+					
+					// Treat triple point workaround
+					//text = text.replace("\u205d", ":"); // not necessary anymore
+				}
         }
         return text;
     }
