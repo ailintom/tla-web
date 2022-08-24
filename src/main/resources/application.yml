@@ -11,7 +11,7 @@ server:
 tla:
     name: Thesaurus Linguae Aegyptiae
     baseurl: https://tlabeta.bbaw.de
-    backend-url: http://tlabeta.bbaw.de:${BACKEND_PORT:9000}
+    backend-url: https://tlabeta.bbaw.de:${BACKEND_PORT:9000}
     editorials:
         path: pages
         lang-default: en
