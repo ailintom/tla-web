@@ -518,7 +518,7 @@ span.lc:hover {
 
 
 .hieroglyphs svg {
-    vertical-align: text-bottom;
+    vertical-align: middle;
     height: 4rem;
 }
 .hieroglyphs .token-glyphs svg {
@@ -603,6 +603,13 @@ g,
     color: black !important;
     font-weight: bold;
 }
+.token-lc:before {
+    content: "[";
+}
+.token-lc:after {
+    content: "]";
+}
+
 .token-para {
     color: var(--BBAWmiddlebluegrey) !important;
     font-weight: bold;
