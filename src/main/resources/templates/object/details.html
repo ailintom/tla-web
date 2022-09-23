@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{base}"
+      xml:lang="en"
+>
+  <head>
+    <title th:text="|#{object_id_label_BTSTCObject} ${obj.id}|"></title>
+  </head>
+
+  <body>
+
+    <div layout:fragment="content">
+
+      <div th:replace="fragments/details :: details-page-header"/>
+
+      <div class="row">
+        <div class="col-sm-12 col-lg-8" id="details-content" th:object="${obj}">
+
+          <div th:replace="fragments/details :: property-pid('object')"/>
+          <div th:replace="fragments/details :: object-property-type-subtype('object')"/>
+          <div th:replace="fragments/details :: date"/>
+         
+          <div th:replace="fragments/details :: bibliography"/>
+          <div th:replace="fragments/details :: object-property-object-paths('ths')"/>
+          <div th:replace="fragments/details :: object-property-related-objects"/>
+          <div th:replace="fragments/details :: editor-info"/>
+        <!-- 
+        
+         <br/>ToDo: 
+          <br/>
+          <br/>External relations: <span th:text="${obj.externalReferences}"></span>
+          <br/>
+          <div th:replace="fragments/details :: external-references"/> fails e.g. on http://localhost:8080/object/4JYU7WOWOZE2FOYYLP3KXEP3BE http://localhost:8080/object/XQKKDM3PQ5GHVNOHAQBYMZBRWA 
+          <br/>Date from passport: <span th:text="${obj.passport}"></span>
+        
+         -->
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 col-lg-8" id="details-content-2" th:object="${obj}">
+          <div th:replace="fragments/details :: object-property-citationBox('object')"/>
+        </div>
+      </div>
+  </body>
+</html>

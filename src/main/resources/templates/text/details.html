@@ -5,7 +5,7 @@
       xml:lang="en"
 >
   <head>
-    <title th:text="|${obj.name} (#{object_id_label_BTSThsEntry} ${obj.id})|"></title>
+    <title th:text="|${obj.name} (#{object_id_label_BTSText} ${obj.id})|"></title>
   </head>
 
   <body>
@@ -16,20 +16,26 @@
 
       <div class="row">
         <div class="col-sm-12 col-lg-8" id="details-content" th:object="${obj}">
-          <div th:replace="fragments/details :: translations"/>
-          <div th:replace="fragments/details :: property-pid('thesaurus')"/>
-			 <div th:replace="fragments/details :: object-property-type-subtype('object')"/>
-          <div th:replace="fragments/details :: external-references"/>
+          <div th:replace="fragments/details :: property-pid('text')"/>
+          <div th:replace="fragments/details :: object-property-type-subtype('object')"/>
+          <div th:replace="fragments/details :: date"/>
+          <div th:replace="fragments/details :: textscript"/>
+          <div th:replace="fragments/details :: language"/>
+          <div th:replace="fragments/details :: origplace"/>
+          <div th:replace="fragments/details :: presloc"/>
+          <div th:replace="fragments/details :: bibliography"/>
           <div th:replace="fragments/details :: object-property-object-paths('ths')"/>
           <div th:replace="fragments/details :: object-property-related-objects"/>
           <div th:replace="fragments/details :: editor-info"/>
         </div>
       </div>
+          
       <div class="row">
         <div class="col-sm-12 col-lg-8" id="details-content-2" th:object="${obj}">
-          <div th:replace="fragments/details :: object-property-citationBox('thesaurus')"/>
+          <div th:replace="fragments/details :: object-property-citationBox('text')"/>
         </div>
       </div>
+		
     </div>
   </body>
 </html>

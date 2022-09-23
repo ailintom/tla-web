@@ -49,7 +49,7 @@ public class SearchController {
     private String defaultForm;
 
    // public static final List<String> SEARCH_FORMS = List.of("lemma-quick", "lemma", "sentence");
-    public static final List<String> SEARCH_FORMS = List.of("lemma-id", "sentence-id", "text-id", "lemma");
+    public static final List<String> SEARCH_FORMS = List.of("lemma", "lemma-id", "sentence-id", "text-id", "object-id", "ths-id");
 
     @ModelAttribute("allScripts")
     public Script[] getAllScripts() {
@@ -60,7 +60,15 @@ public class SearchController {
     public Language[] getAllTranslationLanguages() {
         return LemmaController.SEARCHABLE_TRANSLATION_LANGUAGES; // TODO
     }
-
+    @ModelAttribute("allTranscriptionEncodings")
+    public String[] getAllTranscriptionEncodings() {
+        return LemmaController.SEARCHABLE_TRANSCRIPTION_ENCODING; // TODO
+    }
+    /*  @ModelAttribute("allRootEncodings")
+    public String[] getAllRootEncodings() {
+        return LemmaController.SEARCHABLE_ROOT_ENCODING; // TODO
+    }
+*/
     @ModelAttribute("wordClasses")
     public Map<String, List<String>> getWordClasses() {
     	log.info(" wordclass "+ lemmaSearchConf.getWordClasses());

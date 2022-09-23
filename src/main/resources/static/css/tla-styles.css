@@ -330,7 +330,7 @@ a.navbar-brand {
     color: white;
 }
 
-.result-list-item.inactive {
+.result-list-item .inactive {
     opacity: .4;
     filter: grayscale(100%);
 }
@@ -462,7 +462,8 @@ a.share-results:hover {
     color: grey !important;
 }
 
-.object-path-element a:hover {
+.object-path-element a:hover,
+.result-list-item-element.textdate a:hover {
     color: var(--BBAWred) !important;
 }
 
@@ -636,17 +637,12 @@ g,
 	display: inline;
 }
 
-.translation-de,
-.translation-fr,
-.translation-en,
-.translation-any {
+.result-list-item-element .translation-de,
+.result-list-item-element .translation-fr,
+.result-list-item-element .translation-en,
+.result-list-item-element .translation-any {
     font-weight: bold;
 }
-
-/*.translation-fr,
-.translation-en {
-    font-weight: 300;
-}*/
 
 .lang-icon {
     background-color: #E0E0E0;
@@ -699,6 +695,10 @@ span.token-glyphs svg:hover {
     font-size: 0.8em;
 }
 
+.ling-glossing-transliteration {
+    font-size: 0.85em;
+}
+
 .word-id {
     color: grey;
     font-size: 0.5em;
@@ -706,6 +706,7 @@ span.token-glyphs svg:hover {
 
 
 .ling-glossing,
+.ling-glossing-transliteration,
 .ling-glossing-static {
     font-variant: small-caps;
 }
@@ -1361,6 +1362,17 @@ span.multiselect-native-select select {
     footer .contact {
         text-align: right;
     }
+
+.modal-title {
+	font-size: 1rem;
+}
+.modal-body {
+	font-size: 0.9rem;
+}
+.modal-footer-text {
+	font-size: 0.8rem;
+}
+
 .id {
 	font-size: 1.5em;
 	font-weight: 600;

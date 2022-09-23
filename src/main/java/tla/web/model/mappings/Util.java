@@ -78,8 +78,8 @@ public class Util {
 					// Change a number of parameters, using the DrawingSpecificationsImplementation
 					// class.
 					drawingSpecifications.setSmallSignsCentered(true);
-					drawingSpecifications.setMaxCadratWidth(60);
-					drawingSpecifications.setMaxCadratWidth(60);
+					drawingSpecifications.setMaxCadratHeight(18);
+					drawingSpecifications.setMaxCadratWidth(18);
 					facade.setDrawingSpecifications(drawingSpecifications);
 		
                 Rectangle2D boundingBox = facade.getBounds(
@@ -146,11 +146,17 @@ public class Util {
 				text = text.replace("\\n", "<br/>");
 				
 				// Set style of non-Unicode glyphs in gyphs.unicode
-				text = text.replace("<g>", "<span class=\"latin-in-hiero\">");
-				text = text.replace("</g>", "</span>");
+				if (text.contains("</g>")) {
+					text = text.replace("<g>", "<span class=\"latin-in-hiero\">");
+					text = text.replace("</g>", "</span>");
+				}
+				
+				// Set style of du./pl. markers
+				text = text.replace("PL", "<span class=\"ling-glossing-transliteration\">PL</span>");
+				text = text.replace("DU", "<span class=\"ling-glossing-transliteration\">DU</span>");
 				
 				// Cut out parts in 〈 ... 〉 in marked labels
-				if (text.contains("<label>")) {
+				if (text.contains("</label>")) {
 					text = text.replaceAll("(<label>.*?)〈.*?〉(.*</label>)", "$1$2");
 					text = text.replaceAll("(<label>.*?)〈.*?〉(.*</label>)", "$1$2"); // sic, up to two instances
 					text = text.replace("<label>", "");
