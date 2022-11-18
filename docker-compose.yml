@@ -25,7 +25,7 @@ services:
         environment:
             - ES_HOST=es
             - ES_PORT=9200
-            - SAMPLE_URL
+            - SAMPLE_URL=https://nubes.bbaw.de/s/Ls7betyCtcTJzgm/download/full-entschlackt.tar.gz
         command: "ingest"
 
 
@@ -55,7 +55,7 @@ services:
             - FONTAWESOME_VERSION
             - BOOTSTRAP_VERSION
         ports:
-            - ${LISTEN_PORT:-8080}:8080
+            - ${LISTEN_PORT:-9005}:9005
         restart: unless-stopped
 
 ...
