@@ -26,7 +26,7 @@ services:
         environment:
             - ES_HOST=es
             - ES_PORT=9201
-            - SAMPLE_URL=https://nubes.bbaw.de/s/TcEWS9wZTmCT3CA/download/full.tar.gz
+            - SAMPLE_URL=
         tty: true
         command: "ingest"
 
